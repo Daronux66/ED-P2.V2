@@ -73,18 +73,23 @@ public class ArrayQueueWithRepImpl<T> implements QueueWithRep<T> {
 	
 	 @SuppressWarnings("unchecked")
 	 private void expandCapacity() {
-		
 			ElemQueueWithRep<T>[] nuevo= (ElemQueueWithRep<T>[]) new ElemQueueWithRep[data.length*2];
-		}
+			for(int i=0; i<data.length;i++) {
+				nuevo [i]=data[i];
+			}
+			data=nuevo;
+	 }
 	 
 	
 			@Override
 			public void add(T element, int times) {
+				if (element==null)throw new NullPointerException();
+				if (times<0) throw new IllegalArgumentException();
 				if (!(contains(element))) {
-					if (size() == data.length) expandCapacity();
-						data[count].elem = element;
-						data[count].num=times;
-						count++;
+					if (count == data.length) expandCapacity();
+					ElemQueueWithRep<T> tOb = new ElemQueueWithRep<T> (element,times);
+					data[count]= tOb;
+					count++;
 				}
 				else {
 					for (int i=0;i<count; i++) {
@@ -96,10 +101,17 @@ public class ArrayQueueWithRepImpl<T> implements QueueWithRep<T> {
 
 			@Override
 			public void add(T element) {
+				if (element==null)throw new NullPointerException();
 				if (!(contains(element))) {
-					if (size() == data.length) expandCapacity();
-						data[count].elem = element;
-						count++;
+					if (count == data.length) expandCapacity();
+					ElemQueueWithRep<T> tOb = new ElemQueueWithRep<T> (element, 1);
+					data[count]= tOb;
+					count++;
+				}
+				else {
+					for (int i=0;i<count; i++) {
+						if(element.equals(data[i].elem)) data[i].num = data[i].num+1;
+					}
 				}
 			}
 
@@ -109,7 +121,7 @@ public class ArrayQueueWithRepImpl<T> implements QueueWithRep<T> {
 				if(contains(element)) {
 					for (int i=0;i<count; i++) {
 						if(element.equals(data[i].elem)) {
-							if(data[i].num > times) data[i].num -= times;
+							if(data[i].num > times && times >= 0) data[i].num -= times;
 							else throw new IllegalArgumentException();
 						}
 					}
@@ -138,10 +150,10 @@ public class ArrayQueueWithRepImpl<T> implements QueueWithRep<T> {
 				}
 				count=0;
 			}
-			
 
 			@Override
 			public boolean contains(T element) {
+				if (element==null)throw new NullPointerException();
 				boolean contain=false;
 				for (int i=0;i<count; i++) {
 					if(element.equals(data[i].elem))contain=true;
@@ -151,8 +163,7 @@ public class ArrayQueueWithRepImpl<T> implements QueueWithRep<T> {
 
 			@Override
 			public boolean isEmpty() {
-				if(count==0) return true;
-				else return false;
+				return (count==0);
 			}
 
 			@Override
@@ -188,7 +199,7 @@ public class ArrayQueueWithRepImpl<T> implements QueueWithRep<T> {
 				buffer.append("(");
 				for (int i=0;i<count;i++) {
 					for (int j=0;j<data[i].num;j++) {
-						buffer.append(data[i].toString() + " ");
+						buffer.append(data[i].elem.toString() + " ");
 					}
 				}
 				buffer.append(")");
