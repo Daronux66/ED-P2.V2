@@ -73,12 +73,14 @@ public class LinkedQueueWithRepImpl<T> implements QueueWithRep<T> {
 		if(isEmpty()) {
 			front=node;
 			current=node;
+			current.next=null;
 			count++;
 		}
 		else {
 			if(!contains(element)) {
 				current.next=node;
 				current=node;
+				current.next=null;
 				count++;
 			}
 			else {
@@ -99,12 +101,14 @@ public class LinkedQueueWithRepImpl<T> implements QueueWithRep<T> {
 		if(isEmpty()) {
 			front=node;
 			current=node;
+			current.next=null;
 			count++;
 		}
 		else {
 			if(!contains(element)) {
 				current.next=node;
 				current=node;
+				current.next=null;
 				count++;
 			}
 			else {
